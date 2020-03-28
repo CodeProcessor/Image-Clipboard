@@ -5,7 +5,6 @@ Created on 3/28/2020
 '''
 from pynput.mouse import Listener, Button
 import pyscreenshot as ImageGrab
-import cv2
 import pytesseract
 from PIL import Image
 
@@ -21,7 +20,7 @@ class Main():
 
     def on_click(self, x, y, button, pressed):
 
-        if button == Button.middle:
+        if button == Button.left:
             stage_1 = False
 
             if pressed:
@@ -35,9 +34,9 @@ class Main():
                     try:
                         im = ImageGrab.grab(bbox=(
                         self.press_coords[0], self.press_coords[1], self.release_coords[0], self.release_coords[1]))
-                        filename = "somename_{}.jpg".format(self.press_coords[0])
+                        filename = "somename_{}.png".format(self.press_coords[0])
                         im.save(filename)
-                        text = pytesseract.image_to_string(Image.open(filename))
+                        text = pytesseract.image_to_string(im)
                         print("Image saved, workds: {}".format(text))
                         self.stage_1 = False
                     except ValueError:
@@ -47,6 +46,7 @@ class Main():
             self.stage_1 = False
             print("Reset")
 
+        #                                   This is a test
         print(button)
 
     def on_move(self, x, y):
