@@ -4,8 +4,6 @@ Image clipboard is a tool that you can easily copy the text from images. Select 
 
 ![Alt Text](https://github.com/CodeProcessor/Image-Clipboard/blob/master/assets/image-clipboard.gif)
 
-
-
 ## How to install
 
 ### Ubuntu system
@@ -30,3 +28,4 @@ Open terminal
 ```bash
 imclip
 ```
+Use mouse middle click and drag over the image to copy the content
