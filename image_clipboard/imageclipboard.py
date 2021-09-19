@@ -3,6 +3,9 @@ Created on 3/28/2020
 
 @author: dulanj
 '''
+import argparse
+import logging
+
 import pyperclip
 import pyscreenshot as ImageGrab
 import pytesseract
@@ -10,7 +13,7 @@ from pynput.mouse import Listener, Button
 
 
 class ImageClipboard:
-    def __init__(self, save_image=False):
+    def __init__(self, debug=False, save_image=False):
         self.press_coords = None
         self.save_image = save_image
         with Listener(on_click=self.on_click) as listener:
@@ -29,10 +32,11 @@ class ImageClipboard:
                         filename = "../.temp.jpg"
                         if self.save_image:
                             filename = "image_clipped_{}.png".format(self.press_coords[0])
+                            logging.info(f"Image saved! - {filename}")
                         im.save(filename)
                         text = pytesseract.image_to_string(im)
                         pyperclip.copy(text)
-                        print("clipped: {}".format(text))
+                        logging.info("clipped: {}".format(text))
                     except ValueError as e:
                         ...
                 self.press_coords = None
@@ -40,6 +44,23 @@ class ImageClipboard:
             self.press_coords = None
 
 
+def create_argparse():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--debug', help='Enable debug', action='store_true')
+    parser.add_argument('--save', help='Enable debug', action='store_true')
+
+    args = parser.parse_args()
+    _debug_enabled = args.debug
+    _save_enabled = args.save
+
+    if _debug_enabled:
+        logging.basicConfig(level=logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
+
+    ImageClipboard(save_image=_save_enabled)
+
+
 if __name__ == "__main__":
-    obj = ImageClipboard()
-    obj.main()
+    __save_enabled = True
+    ImageClipboard(save_image=__save_enabled)
