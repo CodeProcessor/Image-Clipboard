@@ -34,7 +34,7 @@ class ImageClipboard:
                             filename = "image_clipped_{}.png".format(self.press_coords[0])
                             logging.info(f"Image saved! - {filename}")
                         im.save(filename)
-                        text = pytesseract.image_to_string(im)
+                        text = pytesseract.image_to_string(im).strip()
                         pyperclip.copy(text)
                         logging.info("clipped: {}".format(text))
                     except ValueError as e:
@@ -58,9 +58,14 @@ def create_argparse():
     else:
         logging.basicConfig(level=logging.INFO)
 
-    ImageClipboard(save_image=_save_enabled)
+    print("Image clip started!")
+    try:
+        ImageClipboard(save_image=_save_enabled)
+    except KeyboardInterrupt:
+        print("Image clip stopped!")
 
 
 if __name__ == "__main__":
     __save_enabled = True
+    logging.basicConfig(level=logging.INFO)
     ImageClipboard(save_image=__save_enabled)
