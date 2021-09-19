@@ -1,0 +1,4 @@
+pyscreenshot==3.0
+pytesseract==0.3.8
+pyperclip==1.8.2
+pynput==1.7.3
