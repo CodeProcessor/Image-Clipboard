@@ -2,7 +2,11 @@
 
 Image clipboard is a tool that you can easily copy the text from images. Select the area then past and use. It's that simple...
 
+Demo
+
 ![Alt Text](https://github.com/CodeProcessor/Image-Clipboard/blob/master/assets/image-clipboard.gif)
+
+Click and hold middle mouse button, then drag to capture the text area and release!
 
 ## How to install
 
