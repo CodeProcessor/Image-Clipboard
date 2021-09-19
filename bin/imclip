@@ -1,0 +1,3 @@
+#!/usr/bin/ python3
+from image_clipboard.imageclipboard import create_argparse
+create_argparse()
