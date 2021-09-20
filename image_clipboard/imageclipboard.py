@@ -5,6 +5,7 @@ Created on 3/28/2020
 '''
 import argparse
 import logging
+import os
 
 import pyperclip
 import pyscreenshot as ImageGrab
@@ -13,7 +14,7 @@ from pynput.mouse import Listener, Button
 
 
 class ImageClipboard:
-    def __init__(self, debug=False, save_image=False):
+    def __init__(self, save_image=False):
         self.press_coords = None
         self.save_image = save_image
         with Listener(on_click=self.on_click) as listener:
@@ -29,11 +30,12 @@ class ImageClipboard:
                     try:
                         im = ImageGrab.grab(
                             bbox=(self.press_coords[0], self.press_coords[1], release_coords[0], release_coords[1]))
-                        filename = "../.temp.jpg"
+                        _filename = ".temp.jpg"
                         if self.save_image:
-                            filename = "image_clipped_{}.png".format(self.press_coords[0])
-                            logging.info(f"Image saved! - {filename}")
-                        im.save(filename)
+                            _filename = "image_clipped_{}.png".format(self.press_coords[0])
+                            logging.info(f"Image saved! - {_filename}")
+                        _filename_full = os.path.join(os.path.expanduser('~'), _filename)
+                        im.save(_filename)
                         text = pytesseract.image_to_string(im).strip()
                         pyperclip.copy(text)
                         logging.info("clipped: {}".format(text))
@@ -57,12 +59,20 @@ def create_argparse():
         logging.basicConfig(level=logging.DEBUG)
     else:
         logging.basicConfig(level=logging.INFO)
-
-    print("Image clip started!")
+    _msg = "Image clip started!"
+    _msg += " | Image save is enabled." if _save_enabled else ""
+    logging.info(_msg)
     try:
         ImageClipboard(save_image=_save_enabled)
     except KeyboardInterrupt:
-        print("Image clip stopped!")
+        logging.info("Image clip stopped!")
+    except Exception as e:
+        url = "https://github.com/CodeProcessor/Image-Clipboard/issues"
+        logging.exception(f"Exception fired - \nPlease create an issue in {url} and help down to track it")
+    finally:
+        git_link = "https://github.com/CodeProcessor"
+        logging.info("Thank you for using image clipper")
+        logging.info(f"Follow me! - {git_link}")
 
 
 if __name__ == "__main__":
